@@ -1,6 +1,6 @@
 # k-Means Clustering: *A Distributed MPI Implementation*
 
-The aim of the [k-means clustering](https://en.wikipedia.org/wiki/K-means_clustering) algorithm (also known as Lloyd's algorithm) is to take a given dataset and divide it up into k number of clusters. The goal is to have some sort of representative clusters for each of its surrounding data points. It algorithm is [unsupervised learning](https://en.wikipedia.org/wiki/Unsupervised_learning) method and hopes to gain some sort of insight into data that may be unseemingly unrelated.
+The aim of the [k-means clustering](https://en.wikipedia.org/wiki/K-means_clustering) algorithm is to take a given dataset and partition these observations up into k number of clusters. Deciding on where these clusters lie is computationally difficult but  be representative of its surrounding data points. It algorithm is [unsupervised learning](https://en.wikipedia.org/wiki/Unsupervised_learning) method and hopes to gain some sort of insight into data that may be unseemingly unrelated.
 
 ### Distributed Functionalities
 
@@ -19,26 +19,16 @@ The aim of the [k-means clustering](https://en.wikipedia.org/wiki/K-means_cluste
 #### Deployment and running the program:
 1. Install [Docker](https://docs.docker.com/engine/installation/linux/ubuntulinux/)
 2. Make sure Docker is running:
-```sh
-$ sudo service docker start
-```
+    $ sudo service docker start
 3. Download NLKNguyen's prebuilt Docker base image:
-```sh
-$ docker pull nlknguyen/alpine-mpich
-$ docker pull nlknguyen/alpine-mpich:onbuild
-```
+    $ docker pull nlknguyen/alpine-mpich
+    $ docker pull nlknguyen/alpine-mpich:onbuild
 4. While in the directory containing source code, run the following the launch the image:
-```sh
-$ docker run --rm -it -v $(PWD):/project nlknguyen/alpine-mpich
-```
+    $ docker run --rm -it -v $(PWD):/project nlknguyen/alpine-mpich
 5. Now with the Docker image running, compile the source code:
-```sh
-$ mpicc k-means.c -o k-means
-```
-6. Now run the program please include an argument in the command line right after the program name to match the number of running processes:
-```sh
-$ mpirun -n 3 ./k-means 3
-```
+    $ mpicc k-means.c -o k-means
+6. Now run the program with the desired number of processes. Include an argument in the command line right after the program name to match the number of processes:
+    $ mpirun -n 3 ./k-means 3
 
 ### Current Limitations
 - Creating too many worker nodes in hopes of further speeding up parallelization can actually impede its progress. There must be a balance between the workload to be distributed to each worker, and the actual number of worker nodes. If there are more workers than necessary, much of the computational efforts are spent distributing the work (message passing), and not spent computing the actual workload. Thus one of the defining characteristics of how well the distributed program will run is its message complexity and how many messages are being sent back and forth throughout the network.
